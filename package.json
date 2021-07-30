@@ -1,0 +1,35 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "ip": "^1.1.5",
+    "nodemon": "^2.0.12",
+    "typescript": "^4.3.5",
+    "uuid": "^8.3.2"
+  },
+  "name": "help_desk",
+  "version": "1.0.0",
+  "main": "./src/server.ts",
+  "devDependencies": {
+    "@types/node": "^16.4.7",
+    "npm-run-all": "^4.1.5"
+  },
+  "scripts": {
+    "dev": "npm-run-all --parallel dev1 dev2",
+    "prestart": "tsc",
+    "start": "node ./dist/server.js",
+    "dev1": "tsc -w",
+    "dev2": "nodemon ./dist/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NimbleFIsh/help_desk.git"
+  },
+  "author": "NimbleFish",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NimbleFIsh/help_desk/issues"
+  },
+  "homepage": "https://github.com/NimbleFIsh/help_desk#readme",
+  "description": ""
+}

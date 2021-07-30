@@ -3,7 +3,6 @@
 import Ticket from "./Ticket"; // Импорт интерфейса Ticket
 import TicketFull from "./TicketFull"; // Импорт интерфейса TicketFull
 
-const ip = require('ip'); // Подключение модуля для работы с ip адрессом удаленного сервера
 const express = require('express'); // Подключение модуля для работы с веб-сервером
 const cors = require('cors'); // Подключение модуля для работы с политикой CORS
 const path = require('path'); // Подключение модуля для работы с путями
@@ -74,5 +73,5 @@ server.post('/', jsonParser, (req: any, res: any) => { // Обработка POS
 
 try { // Отлавливание оишбки
     server.listen(PORT); // Запуск сервера
-    console.log(`Server started on ${ip.address()}:${PORT}`); // Информирование об IP:PORT удаленного сервера
+    console.log('Server started, port:', PORT); // Информирование об IP:PORT удаленного сервера
 } catch (e: any) { console.error('Start server error:', e.code) }; // Сообщение об ошибки в случае ошибки

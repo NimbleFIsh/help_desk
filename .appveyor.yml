@@ -14,4 +14,4 @@ install:
 build: off  # отключаем встроенную в appveyor систему сборки
 
 build_script:
-  - npm prestart   # команда сборки
+  - npm run prestart   # команда сборки

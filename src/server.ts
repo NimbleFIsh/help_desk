@@ -9,7 +9,7 @@ const cors = require('cors'); // Подключение модуля для ра
 const path = require('path'); // Подключение модуля для работы с путями
 const fs = require('fs'); // Подключение модуля для работы с файловой системой
 const { v1: uuidv1 } = require('uuid'); // Подключение модуля для работы с идентификаторами
-const PORT = process.env.port || 3030; // Задание порта сервера
+const PORT = process.env.port || 25565; // Задание порта сервера
 
 const server = express(); // Инициализация веб-сервера
 server.use(cors()); // Использование веб-сервером политики CORS

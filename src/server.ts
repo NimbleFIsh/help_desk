@@ -18,7 +18,15 @@ const pathToFile: string = path.resolve(__dirname, '../ticketsBase.json'); // п
 
 function readDataFile(method: string, res: any, id?: number) {
     const data: Array<Ticket> = JSON.parse(fs.readFileSync(pathToFile, 'utf8')); // Чтение данных из JSON файла
-    res.json(method === 'allTickets' ? data : data.filter((tk: Ticket) => tk.id === id));
+    let another;
+    if (id !== undefined) {
+        if ((data.filter(el => el.id === id)).length !== 0) another = data.filter((tk: Ticket) => tk.id === id);
+        else {
+            res.statusCode = 403;
+            another = 'Access error! Id is not exists!';
+        }
+    }
+    res.json(method === 'allTickets' ? data : another);
 }
 
 server.get('/', (req: any, res: any) => { // Обработка GET запроса
@@ -28,7 +36,6 @@ server.get('/', (req: any, res: any) => { // Обработка GET запрос
             break;
 
         case 'ticketById':
-            if (!(req.query.id instanceof Number)) { res.statusCode = 403; res.send('Access error! Id is not exists!'); }
             readDataFile('ticketById', res, req.query.id);
             break;
 

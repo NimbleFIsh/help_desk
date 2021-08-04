@@ -49,8 +49,8 @@ server.put('/', jsonParser, (req: any, res: any) => {
         if (req.body.id !== '' && req.body.status !== '') {
             const data: Array<TicketFull> = JSON.parse(fs.readFileSync(pathToFile, 'utf8')); // Чтение данных из JSON файла
             let elem = data.filter(el => el.id == req.body.id)[0];
-            elem.name = req.body.name === '' ? req.body.name : elem.name;
-            elem.description = req.body.description === '' ? req.body.description : elem.description;
+            elem.name = req.body.name !== '' ? req.body.name : elem.name;
+            elem.description = req.body.description !== '' ? req.body.description : elem.description;
             elem.status = req.body.status;
             data.filter(el => el.id !== req.body.id).push(elem);
             fs.writeFileSync(pathToFile, JSON.stringify(data, null, 4)); // Запись массива в файл
@@ -103,6 +103,6 @@ server.post('/', jsonParser, (req: any, res: any) => { // Обработка POS
 });
 
 try { // Отлавливание оишбки
-    server.listen(process.env.PORT); // Запуск сервера
-    console.log('Server started, port:', process.env.PORT); // Информирование об IP:PORT удаленного сервера
+    server.listen(process.env.PORT || 25565); // Запуск сервера
+    console.log('Server started, port:', process.env.PORT || 25565); // Информирование об IP:PORT удаленного сервера
 } catch (e: any) { console.error('Start server error:', e.code) }; // Сообщение об ошибки в случае ошибки

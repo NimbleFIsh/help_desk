@@ -44,6 +44,22 @@ server.get('/', (req: any, res: any) => { // Обработка GET запрос
     }
 });
 
+server.put('/', jsonParser, (req: any, res: any) => {
+    if (req.query.method === 'ticketById') {
+        if (req.body.id !== '' && req.body.status !== '') {
+            const data: Array<Ticket> = JSON.parse(fs.readFileSync(pathToFile, 'utf8')); // Чтение данных из JSON файла
+            let elem = data.filter(el => el.id == req.body.id)[0];
+            elem.status = req.body.status;
+            data.filter(el => el.id !== req.body.id).push(elem);
+            fs.writeFileSync(pathToFile, JSON.stringify(data, null, 4)); // Запись массива в файл
+            res.send('status changed!');
+        }
+    } else {
+        res.statusCode = 503;
+        res.send('Unknown PUT request');
+    }
+});
+
 server.post('/', jsonParser, (req: any, res: any) => { // Обработка POST запроса
     if (req.query.method === 'createTicket') {
         if (req.body.name == '' || req.body.description == '' || req.body.status == undefined)
@@ -71,6 +87,6 @@ server.post('/', jsonParser, (req: any, res: any) => { // Обработка POS
 });
 
 try { // Отлавливание оишбки
-    server.listen(process.env.PORT); // Запуск сервера
-    console.log('Server started, port:', process.env.PORT); // Информирование об IP:PORT удаленного сервера
+    server.listen(process.env.PORT || 25565); // Запуск сервера
+    console.log('Server started, port:', process.env.PORT || 25565); // Информирование об IP:PORT удаленного сервера
 } catch (e: any) { console.error('Start server error:', e.code) }; // Сообщение об ошибки в случае ошибки

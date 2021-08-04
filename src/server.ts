@@ -15,7 +15,7 @@ const jsonParser = express.json(); // инициализация парсера 
 const pathToFile: string = path.resolve(__dirname, '../ticketsBase.json'); // путь до файла с данными
 
 function readDataFile(method: string, res: any, id?: number) {
-    const data: Array<Ticket> = JSON.parse(fs.readFileSync(pathToFile, 'utf8')); // Чтение данных из JSON файла
+    const data: Array<TicketFull> = JSON.parse(fs.readFileSync(pathToFile, 'utf8')); // Чтение данных из JSON файла
     let another;
     if (id !== undefined) {
         if ((data.filter(el => el.id === id)).length !== 0) another = data.filter((tk: Ticket) => tk.id === id);
@@ -47,8 +47,10 @@ server.get('/', (req: any, res: any) => { // Обработка GET запрос
 server.put('/', jsonParser, (req: any, res: any) => {
     if (req.query.method === 'ticketById') {
         if (req.body.id !== '' && req.body.status !== '') {
-            const data: Array<Ticket> = JSON.parse(fs.readFileSync(pathToFile, 'utf8')); // Чтение данных из JSON файла
+            const data: Array<TicketFull> = JSON.parse(fs.readFileSync(pathToFile, 'utf8')); // Чтение данных из JSON файла
             let elem = data.filter(el => el.id == req.body.id)[0];
+            elem.name = req.body.name === '' ? req.body.name : elem.name;
+            elem.description = req.body.description === '' ? req.body.description : elem.description;
             elem.status = req.body.status;
             data.filter(el => el.id !== req.body.id).push(elem);
             fs.writeFileSync(pathToFile, JSON.stringify(data, null, 4)); // Запись массива в файл
@@ -63,7 +65,7 @@ server.put('/', jsonParser, (req: any, res: any) => {
 server.delete('/', (req: any, res: any) => {
     if (req.query.method === 'ticketById') {
         if (req.query.id !== '') {
-            const data: Array<Ticket> = JSON.parse(fs.readFileSync(pathToFile, 'utf8')); // Чтение данных из JSON файла
+            const data: Array<TicketFull> = JSON.parse(fs.readFileSync(pathToFile, 'utf8')); // Чтение данных из JSON файла
             let remId = data.filter(el => el.id !== req.query.id);
             fs.writeFileSync(pathToFile, JSON.stringify(remId, null, 4)); // Запись массива в файл
             res.send('ok');
@@ -88,7 +90,7 @@ server.post('/', jsonParser, (req: any, res: any) => { // Обработка POS
         }
 
         try {
-            const data: Array<Ticket> = JSON.parse(fs.readFileSync(pathToFile, 'utf8')); // Чтение данных из JSON файла
+            const data: Array<TicketFull> = JSON.parse(fs.readFileSync(pathToFile, 'utf8')); // Чтение данных из JSON файла
             data.push(ticket); // Запись нового тикета в общий массив
             fs.writeFileSync(pathToFile, JSON.stringify(data, null, 4)); // Запись массива в файл
             res.send('Тикет успешно создан!');
@@ -101,6 +103,6 @@ server.post('/', jsonParser, (req: any, res: any) => { // Обработка POS
 });
 
 try { // Отлавливание оишбки
-    server.listen(process.env.PORT || 25565); // Запуск сервера
-    console.log('Server started, port:', process.env.PORT || 25565); // Информирование об IP:PORT удаленного сервера
+    server.listen(process.env.PORT); // Запуск сервера
+    console.log('Server started, port:', process.env.PORT); // Информирование об IP:PORT удаленного сервера
 } catch (e: any) { console.error('Start server error:', e.code) }; // Сообщение об ошибки в случае ошибки

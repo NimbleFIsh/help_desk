@@ -60,6 +60,20 @@ server.put('/', jsonParser, (req: any, res: any) => {
     }
 });
 
+server.delete('/', (req: any, res: any) => {
+    if (req.query.method === 'ticketById') {
+        if (req.query.id !== '') {
+            const data: Array<Ticket> = JSON.parse(fs.readFileSync(pathToFile, 'utf8')); // Чтение данных из JSON файла
+            let remId = data.filter(el => el.id !== req.query.id);
+            fs.writeFileSync(pathToFile, JSON.stringify(remId, null, 4)); // Запись массива в файл
+            res.send('ok');
+        }
+    } else {
+        res.statusCode = 503;
+        res.send('Unknown Delete request');
+    }
+});
+
 server.post('/', jsonParser, (req: any, res: any) => { // Обработка POST запроса
     if (req.query.method === 'createTicket') {
         if (req.body.name == '' || req.body.description == '' || req.body.status == undefined)
